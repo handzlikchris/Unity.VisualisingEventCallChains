@@ -8,7 +8,7 @@
     }
   ],
   "dependencies": {
-    "io.extendreality.zinnia.unity": "1.11.0",
+    "io.extendreality.malimbe": "9.6.5",
     "com.unity.collab-proxy": "1.2.16",
     "com.unity.ext.nunit": "1.0.0",
     "com.unity.ide.rider": "1.1.0",
