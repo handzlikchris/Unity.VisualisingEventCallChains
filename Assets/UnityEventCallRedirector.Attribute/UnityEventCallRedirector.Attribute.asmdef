@@ -1,0 +1,11 @@
+{
+    "name": "UnityEventCallRedirector.Attribute",
+    "references": [],
+    "optionalUnityReferences": [],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "versionDefines": [
+        
+    ]
+}

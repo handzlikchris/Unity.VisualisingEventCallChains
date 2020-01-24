@@ -73,8 +73,14 @@
     <Reference Include="Unity.Timeline.Editor">
       <HintPath>F:/_src/!Unity/VisualisingUnityCallChains/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
     </Reference>
+    <Reference Include="Supyrb.Editor">
+      <HintPath>F:/_src/!Unity/VisualisingUnityCallChains/Library/ScriptAssemblies/Supyrb.Editor.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.VSCode.Editor">
       <HintPath>F:/_src/!Unity/VisualisingUnityCallChains/Library/ScriptAssemblies/Unity.VSCode.Editor.dll</HintPath>
+    </Reference>
+    <Reference Include="Zinnia.Editor">
+      <HintPath>F:/_src/!Unity/VisualisingUnityCallChains/Library/ScriptAssemblies/Zinnia.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.TextMeshPro.Editor">
       <HintPath>F:/_src/!Unity/VisualisingUnityCallChains/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
@@ -90,6 +96,9 @@
     </Reference>
     <Reference Include="Unity.Rider.Editor">
       <HintPath>F:/_src/!Unity/VisualisingUnityCallChains/Library/ScriptAssemblies/Unity.Rider.Editor.dll</HintPath>
+    </Reference>
+    <Reference Include="Zinnia.Runtime">
+      <HintPath>F:/_src/!Unity/VisualisingUnityCallChains/Library/ScriptAssemblies/Zinnia.Runtime.dll</HintPath>
     </Reference>
     <Reference Include="Unity.TextMeshPro">
       <HintPath>F:/_src/!Unity/VisualisingUnityCallChains/Library/ScriptAssemblies/Unity.TextMeshPro.dll</HintPath>
@@ -294,6 +303,21 @@
     </Reference>
     <Reference Include="Mono.Cecil_debug">
       <HintPath>F:/_src/!Unity/VisualisingUnityCallChains/Assets/UnityEventCallRedirector.Fody/RequiredDll/Mono.Cecil_debug.dll</HintPath>
+    </Reference>
+    <Reference Include="Malimbe.PropertySerializationAttribute">
+      <HintPath>F:/_src/!Unity/VisualisingUnityCallChains/Library/PackageCache/io.extendreality.malimbe@9.6.5/Runtime/Malimbe.PropertySerializationAttribute.dll</HintPath>
+    </Reference>
+    <Reference Include="Malimbe.MemberChangeMethod">
+      <HintPath>F:/_src/!Unity/VisualisingUnityCallChains/Library/PackageCache/io.extendreality.malimbe@9.6.5/Runtime/Malimbe.MemberChangeMethod.dll</HintPath>
+    </Reference>
+    <Reference Include="Malimbe.MemberClearanceMethod">
+      <HintPath>F:/_src/!Unity/VisualisingUnityCallChains/Library/PackageCache/io.extendreality.malimbe@9.6.5/Runtime/Malimbe.MemberClearanceMethod.dll</HintPath>
+    </Reference>
+    <Reference Include="Malimbe.BehaviourStateRequirementMethod">
+      <HintPath>F:/_src/!Unity/VisualisingUnityCallChains/Library/PackageCache/io.extendreality.malimbe@9.6.5/Runtime/Malimbe.BehaviourStateRequirementMethod.dll</HintPath>
+    </Reference>
+    <Reference Include="Malimbe.XmlDocumentationAttribute">
+      <HintPath>F:/_src/!Unity/VisualisingUnityCallChains/Library/PackageCache/io.extendreality.malimbe@9.6.5/Runtime/Malimbe.XmlDocumentationAttribute.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework">
       <HintPath>F:/_src/!Unity/VisualisingUnityCallChains/Library/PackageCache/com.unity.ext.nunit@1.0.0/net35/unity-custom/nunit.framework.dll</HintPath>

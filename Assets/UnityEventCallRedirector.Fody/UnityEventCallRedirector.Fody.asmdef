@@ -1,0 +1,14 @@
+{
+    "name": "UnityEventCallRedirector.Fody",
+    "references": [
+        "UnityEventCallRedirector.Attribute"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": []
+}
