@@ -1,18 +1,20 @@
 
 
 
+
 # Visualising Unity Event Call Chains
 
 If you worked with `UnityEvents` you know that it's quite good way to decouple component logic and use events to pass data. You probably also found that when those call-chains get deep it's quite difficult to understand what's happening from wider perspective.
 
-This tool will help you visualise that workflow using Unity profiler, instead of seeing this
-![Event Call Chain Setup](/_github/event-call-chain-setup.png)
+This tool will help you visualise that workflow using Unity profiler, instead of going through the chain from node to node you can see **big picture** with profiler window while still easily navigating between game object nodes
+![Event Call Chain Profiler view](/_github/event-call-chain-profiler-view_small)
 
-You'll be able to see **big picture** with profiler window while still easily navigating between game object nodes
-![Event Call Chain Profiler view](/_github/event-call-chain-profiler-view.png)
 
-With bigger solution that should allow you to have much better understanding of what's actually happening.
-![Event Call Chain Visualisation Workflow](/_github/ViewingUnityEventInvokeCallsInProfiler.gif)
+That should allow you to have much better understanding of what's actually happening.
+![Event Call Chain Visualisation Workflow](/_github/ViewingUnityEventInvokeCallsInProfiler_workflow.gif)
+
+Which helps a lot if you have a solution that already uses event call chains extensively
+![Event Call Chain Visualisation Workflow](/_github/ViewingUnityEventInvokeCallsInProfiler_VRTK.gif)
 *from [VRTK Farm example](https://github.com/ExtendRealityLtd/VRTK) which uses call chains extensively*
 
 
@@ -33,10 +35,10 @@ Method signature and default implementation:
 ```
 
 ## Setup
-You can clone this repository and run it in Unity as a example.
+You can clone this repository and run it in Unity as an example.
 
 To import into your project:
-1) In Unity add a package dependency to [Malimbe]([https://github.com/ExtendRealityLtd/Malimbe](https://github.com/ExtendRealityLtd/Malimbe)) which will hook up to Unity build process so the weaver code can work on your assembies after Unity is done compiling them.
+1) In Unity add a package dependency to [Malimbe]([https://github.com/ExtendRealityLtd/Malimbe](https://github.com/ExtendRealityLtd/Malimbe)) which will hook up to Unity build process so the weaver code can work on your assemblies after Unity is done compiling them.
 
 You can do that via `manifest.json` file located in `/Packages` folder. You'll have to add following entries (as per Malimbe page)
 ```
@@ -61,11 +63,18 @@ You can do that via `manifest.json` file located in `/Packages` folder. You'll h
 3) Recompile
 - If you see an error
 `'A configuration lists 'UnityEventCallRedirector' but the assembly file wasn't found in the search paths'`
-That means `UnityEventCallRedirector.Fody` is not compiled, you can go to `ModuleWeaver.cs` and make some non-relevant change (like adding a space) followed by save to make sure DLL is actually compiled
+That means `UnityEventCallRedirector.Fody` is not compiled, you can go to `ModuleWeaver.cs` and make some non-relevant change (like adding a space) followed by saving to make sure DLL is actually compiled
 4) Now changes to your scripts will trigger recompile which will in turn trigger IL Weaving to intercept your calls
 
+### Finding Interesting Frames
+You can use `FrameFinder` script located in `UnityEventCallRedirector/ProfilerUtilities` to find your custom markers. 
+- drop the script onto a game object
+- change `FrameContains` to marker that you're after, for example, if you're looking for calls made from script `TestCallChain` by `Child-1-2-1` object you can put `Child-1-2-1 (TestCallChain)`.
+- hit `ShowInProfiler`
+- optionally you can navigate further with `FindNext`
+
 ### Configuring Interception
-In the package you'll find `EventInterceptor.cs` with `Intercept` method. You can adjust that as needed. There's also an assembly attribute specified `UnityEventCallRedirector` where you can configure some more options.
+In the package, you'll find `EventInterceptor.cs` with `Intercept` method. You can adjust that as needed. There's also an assembly attribute specified `UnityEventCallRedirector` where you can configure some more options.
 
 - `eventInterceptorTypeName` - if different than `EventInterceptor`
 - `replaceCallsFromNamespacesRegex` - it'll narrow down types to be looked at when searching for `UnityEvent``1.Invoke` calls
