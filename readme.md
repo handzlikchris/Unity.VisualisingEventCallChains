@@ -7,7 +7,7 @@
 If you worked with `UnityEvents` you know that it's quite good way to decouple component logic and use events to pass data. You probably also found that when those call-chains get deep it's quite difficult to understand what's happening from wider perspective.
 
 This tool will help you visualise that workflow using Unity profiler, instead of going through the chain from node to node you can see **big picture** with profiler window while still easily navigating between game object nodes
-![Event Call Chain Profiler view](/_github/event-call-chain-profiler-view_small)
+![Event Call Chain Profiler view](/_github/event-call-chain-profiler-view_small.png)
 
 
 That should allow you to have much better understanding of what's actually happening.
@@ -59,7 +59,7 @@ You can do that via `manifest.json` file located in `/Packages` folder. You'll h
 }
 ```
 
-2)  Download and import [UnityEventCallRedirector.unitypackage](/_github/UnityEventCallRedirector.unitypackage)
+2)  Download and import [UnityEventCallRedirector.unitypackage](https://github.com/handzlikchris/Unity.VisualisingEventCallChains/raw/master/_github/UnityEventCallRedirector.unitypackage)
 3) Recompile
 - If you see an error
 `'A configuration lists 'UnityEventCallRedirector' but the assembly file wasn't found in the search paths'`
