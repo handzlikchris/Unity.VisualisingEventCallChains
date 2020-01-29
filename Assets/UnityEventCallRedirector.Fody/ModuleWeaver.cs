@@ -107,10 +107,30 @@ namespace UnityEventCallRedirector.Fody
 
                     il.InsertAfter(instruction, il.Create(OpCodes.Call, _endSample));
 
-                    LogDebug($"Redirected: {method.DeclaringType.Name}::{method.Name} via fallback inline IL");
+                    LogDebug($"{ModuleDefinition.Assembly.Name} Redirected: {method.DeclaringType.Name}::{method.Name} via fallback inline IL");
                 }
+
+                //When adding IL, those short branch instructions might now be illegal, replacing them with standard instructions will prevent that
+                ReplaceShortBranchInstructions(method, il);
             }
-            LogInfo($"Redirected {methodWithInstructionsToReplace.Count} calls via {(_interceptMethod != null ? "interceptor" : "fallback inline IL")}");
+
+            LogInfo($"{ModuleDefinition.Assembly.Name} Redirected: {methodWithInstructionsToReplace.Count} calls via {(_interceptMethod != null ? "interceptor" : "fallback inline IL")}");
+        }
+
+        private static void ReplaceShortBranchInstructions(MethodDefinition method, ILProcessor il)
+        {
+            ReplaceShortBranchInstruction(method, il, OpCodes.Br_S, OpCodes.Br);
+            ReplaceShortBranchInstruction(method, il, OpCodes.Brtrue_S, OpCodes.Brtrue);
+            ReplaceShortBranchInstruction(method, il, OpCodes.Brfalse_S, OpCodes.Brfalse);
+        }
+        
+        private static void ReplaceShortBranchInstruction(MethodDefinition method, ILProcessor il, OpCode shortBranchOpcode, OpCode standardBranchOpCode)
+        {
+            var shortBranchInstructions = method.Body.Instructions.Where(i => i.OpCode == shortBranchOpcode).ToList();
+            foreach (var shortBranchInstruction in shortBranchInstructions)
+            {
+                il.Replace(shortBranchInstruction, il.Create(standardBranchOpCode, (Instruction) shortBranchInstruction.Operand));
+            }
         }
 
         private List<MethodDefinitionInstructionToReplacePair> FindMethodsWithInstructionsCallingUnityEvent(MethodDefinition unityEventInvokeMethod)
