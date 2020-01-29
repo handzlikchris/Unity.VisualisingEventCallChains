@@ -63,6 +63,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\UnityEventCallRedirector.Fody\MethodBodyExtensions.cs" />
     <Compile Include="Assets\UnityEventCallRedirector.Fody\ModuleWeaver.cs" />
     <None Include="Assets\UnityEventCallRedirector.Fody\UnityEventCallRedirector.Fody.asmdef" />
     <Reference Include="UnityEditor.UI">

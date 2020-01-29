@@ -1,4 +1,5 @@
-﻿using UnityEventCallRedirector.Attribute;
+﻿using Mono.Cecil.Rocks;
+using UnityEventCallRedirector.Attribute;
 
 namespace UnityEventCallRedirector.Fody
 {
@@ -11,7 +12,6 @@ namespace UnityEventCallRedirector.Fody
     using Mono.Cecil.Cil;
     using System.Reflection;
     using UnityEngine.Profiling;
-
 
     public sealed class ModuleWeaver : BaseModuleWeaver
     {
@@ -75,6 +75,7 @@ namespace UnityEventCallRedirector.Fody
                 var instruction = methodWithInstructionToReplace.Instruction;
                 var il = method.Body.GetILProcessor();
 
+                method.Body.SimplifyMacros();
                 if (_interceptMethod != null)
                 {
                     var callValueGenericParameter = ((GenericInstanceType)((MethodReference)instruction.Operand).DeclaringType).GenericArguments[0];
@@ -109,28 +110,10 @@ namespace UnityEventCallRedirector.Fody
 
                     LogDebug($"{ModuleDefinition.Assembly.Name} Redirected: {method.DeclaringType.Name}::{method.Name} via fallback inline IL");
                 }
-
-                //When adding IL, those short branch instructions might now be illegal, replacing them with standard instructions will prevent that
-                ReplaceShortBranchInstructions(method, il);
+                method.Body.OptimizeMacros();
             }
 
             LogInfo($"{ModuleDefinition.Assembly.Name} Redirected: {methodWithInstructionsToReplace.Count} calls via {(_interceptMethod != null ? "interceptor" : "fallback inline IL")}");
-        }
-
-        private static void ReplaceShortBranchInstructions(MethodDefinition method, ILProcessor il)
-        {
-            ReplaceShortBranchInstruction(method, il, OpCodes.Br_S, OpCodes.Br);
-            ReplaceShortBranchInstruction(method, il, OpCodes.Brtrue_S, OpCodes.Brtrue);
-            ReplaceShortBranchInstruction(method, il, OpCodes.Brfalse_S, OpCodes.Brfalse);
-        }
-        
-        private static void ReplaceShortBranchInstruction(MethodDefinition method, ILProcessor il, OpCode shortBranchOpcode, OpCode standardBranchOpCode)
-        {
-            var shortBranchInstructions = method.Body.Instructions.Where(i => i.OpCode == shortBranchOpcode).ToList();
-            foreach (var shortBranchInstruction in shortBranchInstructions)
-            {
-                il.Replace(shortBranchInstruction, il.Create(standardBranchOpCode, (Instruction) shortBranchInstruction.Operand));
-            }
         }
 
         private List<MethodDefinitionInstructionToReplacePair> FindMethodsWithInstructionsCallingUnityEvent(MethodDefinition unityEventInvokeMethod)
