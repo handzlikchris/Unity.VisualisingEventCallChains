@@ -9,7 +9,7 @@ using UnityEventCallRedirector.Attribute;
     replaceCallsFromNamespacesRegex: ".*",
     ExcludeFullMethodNameRegex = "ObservableList.+::Start"
 )]
- 
+
 namespace Assets.UnityEventCallRedirector
 {
     public class EventInterceptor

@@ -82,7 +82,10 @@ namespace UnityEventCallRedirector.Fody
                     var genericInterceptMethod = new GenericInstanceMethod(_interceptMethod);
                     genericInterceptMethod.GenericArguments.Add(callValueGenericParameter);
 
-                    il.InsertBefore(instruction, il.Create(OpCodes.Ldarg_0));
+                    if (method.IsStatic)
+                        il.InsertBefore(instruction, il.Create(OpCodes.Ldstr, "Static:" + method.FullName));
+                    else
+                        il.InsertBefore(instruction, il.Create(OpCodes.Ldarg_0));
                     il.InsertBefore(instruction, il.Create(OpCodes.Ldstr, method.Name));
                     il.Replace(instruction, il.Create(OpCodes.Call, genericInterceptMethod));
 
@@ -90,22 +93,31 @@ namespace UnityEventCallRedirector.Fody
                 }
                 else
                 {
-                    var beginSampleInstructions = new List<Instruction>
+                    il.InsertBefore(instruction, il.Create(OpCodes.Ldstr, _fallbackSampleFormat));
+                    if (method.IsStatic)
                     {
-                        il.Create(OpCodes.Ldstr, _fallbackSampleFormat),
-                        il.Create(OpCodes.Ldarg_0),
-                        il.Create(OpCodes.Callvirt, _unityObjectGetName),
-                        il.Create(OpCodes.Ldarg_0),
-                        il.Create(OpCodes.Callvirt, _objectGetType),
-                        il.Create(OpCodes.Callvirt, _memberInfoGetName),
-                        il.Create(OpCodes.Ldstr, method.Name),
-                        il.Create(OpCodes.Call, _stringFormat),
-                        il.Create(OpCodes.Ldarg_0),
-                        il.Create(OpCodes.Call, _beginSample),
-                    };
+                        il.InsertBefore(instruction, il.Create(OpCodes.Ldstr, "Static" + method.FullName));
+                        il.InsertBefore(instruction, il.Create(OpCodes.Ldstr, "Static" + method.FullName));
+                    }
+                    else
+                    {
+                        il.InsertBefore(instruction, il.Create(OpCodes.Ldarg_0));
+                        il.InsertBefore(instruction, il.Create(OpCodes.Callvirt, _unityObjectGetName));
+                        il.InsertBefore(instruction, il.Create(OpCodes.Ldarg_0));
+                        il.InsertBefore(instruction, il.Create(OpCodes.Callvirt, _objectGetType));
+                        il.InsertBefore(instruction, il.Create(OpCodes.Callvirt, _memberInfoGetName));
+                    }
 
-                    beginSampleInstructions.ForEach(i => il.InsertBefore(instruction, i));
 
+                    il.InsertBefore(instruction, il.Create(OpCodes.Ldstr, method.Name));
+                    il.InsertBefore(instruction, il.Create(OpCodes.Call, _stringFormat));
+                    if (method.IsStatic)
+                        il.InsertBefore(instruction, il.Create(OpCodes.Ldnull));
+                    else
+                        il.InsertBefore(instruction, il.Create(OpCodes.Ldarg_0));
+                    
+                    il.InsertBefore(instruction, il.Create(OpCodes.Call, _beginSample));
+                    
                     il.InsertAfter(instruction, il.Create(OpCodes.Call, _endSample));
 
                     LogDebug($"{ModuleDefinition.Assembly.Name} Redirected: {method.DeclaringType.Name}::{method.Name} via fallback inline IL");
